@@ -1,0 +1,29 @@
+{
+  "name": "chat-server",
+  "version": "1.0.0",
+  "description": "having fun with socket.io",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GusttaH/react-real-time-chat.git"
+  },
+  "keywords": [
+    "real-time",
+    "socket.io",
+    "nodejs"
+  ],
+  "author": "Gustavo Henrique https://github.com/GusttaH/",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/GusttaH/react-real-time-chat/issues"
+  },
+  "homepage": "https://github.com/GusttaH/react-real-time-chat#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "http": "0.0.1-security",
+    "socket.io": "^2.3.0"
+  }
+}
