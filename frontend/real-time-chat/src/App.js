@@ -40,6 +40,8 @@ const  App = () => {
   const [user, setUser] = useState('')
   const [currentMessage, setCurrentMessage] = useState('')
   const [messages, setMessages] = useState([])
+  const [specificMessage, setSpecificMessage] = useState([])
+  const [userId, setUserId] = useState('')
   
   useEffect(() => {
     
@@ -47,6 +49,11 @@ const  App = () => {
     socket.on('receivedMessage', (message) => {
       console.log('received?', message)
       setMessages(prevMessages => [...prevMessages, message])
+    })
+
+    socket.on('receivedSpecificMessage', (message) => {
+      console.log('receivedSpecific?', message)
+      setSpecificMessage(prevMessages => [...prevMessages, message])
     })
   }, [])
 
@@ -58,12 +65,20 @@ const  App = () => {
     e.preventDefault()
     const message = {
       user: user,
-      message: currentMessage
+      message: currentMessage,
+      id: socket.id
     }
-    socket.emit('sendMessage', message)
+    if(!!userId) {
+      message.individualId = userId
+      socket.emit('specificMessage', message)
+    } else {
+      socket.emit('sendMessage', message)
+    }
     setCurrentMessage('')
     setMessages(prevMessages => [...prevMessages, message])
+
   }
+
 
   return (
     <>
@@ -72,11 +87,22 @@ const  App = () => {
         <div className="container d-flex align-items-center h-100 justify-content-center">
           <div className="card h-75 w-75" style={{ background: '#fbf7f0', borderRadius: '15px' }}>
             <div className="card-body">
-              <div id="chat-body" className="bg-light w-100 h-100 border rounded p-5">
+              <div id="chat-body" className="bg-light w-100 h-100 border rounded p-5" style={{ overflow: 'auto'}}>
                 {
                   messages.map(message => {
                     return(
-                      <div className="rounded border w-50 px-3 pb-2 pt-0 shadow-sm mb-3">
+                      <div className="rounded border w-50 px-3 pb-2 pt-0 shadow-sm mb-3" onClick={() => setUserId(message.id)}>
+                        <span style={{ fontSize: '.8rem', fontWeight: 'bold', color: '#555555'}} >{message.user}</span>
+                        <hr className="mt-0 mb-2" />
+                        <p className="mb-0" style={{ color: '#555555' }}>{message.message}</p>
+                      </div>
+                    )
+                  })
+                }
+                {
+                  specificMessage.map(message => {
+                    return(
+                      <div className="rounded border w-50 px-3 pb-2 pt-0 shadow-sm mb-3" onClick={() => setUserId(message.id)}>
                         <span style={{ fontSize: '.8rem', fontWeight: 'bold', color: '#555555'}} >{message.user}</span>
                         <hr className="mt-0 mb-2" />
                         <p className="mb-0" style={{ color: '#555555' }}>{message.message}</p>

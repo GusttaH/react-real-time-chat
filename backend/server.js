@@ -10,8 +10,15 @@ io.on('connection', (socket) => {
 
   socket.emit('previousMessages', messages)
   socket.on('sendMessage', data => {
+    console.log(data)
     messages.push(data)
     socket.broadcast.emit('receivedMessage', data)
+  })
+
+  socket.on('specificMessage', data => {
+    console.log(data)
+    // messages.push(data)
+    socket.broadcast.to(data.individualId).emit('receivedSpecificMessage', data);
   })
 })
 
